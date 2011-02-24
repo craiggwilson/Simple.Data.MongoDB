@@ -11,7 +11,7 @@ namespace Simple.Data.MongoDB
     {
         public static IDictionary<string, object> ToDictionary(this BsonDocument document)
         {
-            return document.Elements.ToDictionary(x => x.Name, x => ConvertValue(x.Value));
+            return document.Elements.ToDictionary(x => x.Name, x => ConvertValue(x.Value), MongoIdKeyComparer.DefaultInstance);
         }
 
         private static object ConvertValue(BsonValue value)

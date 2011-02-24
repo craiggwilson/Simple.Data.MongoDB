@@ -61,6 +61,7 @@
     <Compile Include="MongoAdapterFinder.cs" />
     <Compile Include="MongoAdapterInserter.cs" />
     <Compile Include="MongoAdapterUpdater.cs" />
+    <Compile Include="MongoIdKeyComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
