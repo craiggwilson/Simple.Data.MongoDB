@@ -1,7 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Data.MongoDB", "Simple.Data.MongoDB\Simple.Data.MongoDB.csproj", "{ED7C7089-7193-4144-ADCB-D8669C3CB637}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Data.MongoDBTest", "Simple.Data.MongoDBTest\Simple.Data.MongoDBTest.csproj", "{5388EF29-E3EE-422B-A95A-389D62AF038E}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED7C7089-7193-4144-ADCB-D8669C3CB637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED7C7089-7193-4144-ADCB-D8669C3CB637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED7C7089-7193-4144-ADCB-D8669C3CB637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED7C7089-7193-4144-ADCB-D8669C3CB637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5388EF29-E3EE-422B-A95A-389D62AF038E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5388EF29-E3EE-422B-A95A-389D62AF038E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5388EF29-E3EE-422B-A95A-389D62AF038E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5388EF29-E3EE-422B-A95A-389D62AF038E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
