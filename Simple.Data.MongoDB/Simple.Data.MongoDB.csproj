@@ -31,18 +31,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB.Bson">
+    <Reference Include="MongoDB.Bson, Version=0.11.0.4042, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\Assemblies\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver">
+    <Reference Include="MongoDB.Driver, Version=0.11.0.4042, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\Assemblies\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="Simple.Data">
-      <HintPath>..\Assemblies\Simple.Data.dll</HintPath>
+    <Reference Include="Simple.Data, Version=0.5.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Simple.Data.Core.0.5.0.2\lib\net40\Simple.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Simple.Data.Ado">
+      <HintPath>..\packages\Simple.Data.Core.0.5.0.2\lib\net40\Simple.Data.Ado.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.CoreEx">
+      <HintPath>..\packages\Rx-Core.1.0.2856.0\lib\Net4\System.CoreEx.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive">
+      <HintPath>..\packages\Rx-Main.1.0.2856.0\lib\Net4\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,6 +73,9 @@
     <Compile Include="MongoAdapterUpdater.cs" />
     <Compile Include="MongoIdKeyComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
