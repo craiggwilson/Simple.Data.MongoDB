@@ -1,8 +1,9 @@
-## Simple.Data.MongoDB
+Simple.Data.MongoDB
+===================
 
-This is the mongodb adapter for the Simple.Data library, found at https://github.com/markrendle/Simple.Data.  For examples on its usage, see the core site as the syntax is exactly the same.  Any departures from that syntax will be documented in the wiki.
+This is the mongodb adapter for the [Simple.Data](https://github.com/markrendle/Simple.Data) library. For examples on its usage, see the core site as the syntax is exactly the same.  Any departures from that syntax will be documented in the wiki.
 
-This library is available via nuget.
+This library is available via [nuget](http://www.nuget.org).
 
 ### Change Log
 
@@ -12,4 +13,4 @@ This library is available via nuget.
   - Initial Release
   
 ### Maintainers
-* Craig Wilson		craiggwilson@gmail.com
+* [Craig Wilson](https://github.com/craiggwilson)
