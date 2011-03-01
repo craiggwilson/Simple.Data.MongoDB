@@ -6,8 +6,10 @@ This library is available via nuget.
 
 ### Change Log
 
+* 3/1/2011 - 0.5.0.3
+  - Removed MongoDB libraries and replaced them with a nuget package.
 * 2/28/2011 - 0.5.0.2 
-  ** Initial Release
+  - Initial Release
   
 ### Maintainers
 * Craig Wilson		craiggwilson@gmail.com
