@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.IO;
+using System.Collections.Concurrent;
 using System.Dynamic;
-using MongoDB.Bson.DefaultSerializer;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CSharp.RuntimeBinder;
-using System.Runtime.CompilerServices;
-using System.Collections.Concurrent;
+
+using MongoDB.Bson.IO;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace Simple.Data.MongoDB
 {

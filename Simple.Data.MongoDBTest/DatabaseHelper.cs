@@ -12,11 +12,6 @@ namespace Simple.Data.MongoDBTest
 {
     internal static class DatabaseHelper
     {
-        static DatabaseHelper()
-        {
-            BsonSerializer.SerializationProvider = new DynamicSerializationProvider();
-        }
-
         public static dynamic Open()
         {
             return Database.Opener.OpenMongo("mongodb://localhost/simpleDataTests?safe=true");

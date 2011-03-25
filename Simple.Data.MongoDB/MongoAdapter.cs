@@ -18,11 +18,7 @@ namespace Simple.Data.MongoDB
 
         static MongoAdapter()
         {
-            var provider = BsonSerializer.SerializationProvider;
-            if (provider == null)
-                BsonSerializer.SerializationProvider = new DynamicSerializationProvider();
-            else if (!(provider is DynamicSerializationProvider))
-                throw new SimpleDataException("A serialization provider has already been registered.");
+            BsonSerializer.RegisterSerializationProvider(new DynamicSerializationProvider());
         }
 
         public MongoAdapter()

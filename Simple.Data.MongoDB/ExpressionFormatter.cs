@@ -1,14 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 
 using MongoDB.Bson;
-using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using System.Collections;
-using MongoDB.Bson.DefaultSerializer;
-using System.Text.RegularExpressions;
 
 namespace Simple.Data.MongoDB
 {

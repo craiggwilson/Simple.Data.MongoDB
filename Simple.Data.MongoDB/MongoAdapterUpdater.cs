@@ -31,9 +31,7 @@ namespace Simple.Data.MongoDB
                 data.Remove("Id");
             }
 
-            var doc = new BsonDocument("$set", data.ToBsonDocument());
-
-            var update = global::MongoDB.Driver.Builders.Update.Wrap(doc);
+            var update = new UpdateDocument("$set", data.ToBsonDocument());
 
             var result = collection.Update(condition, update, UpdateFlags.Multi);
             if (result != null)

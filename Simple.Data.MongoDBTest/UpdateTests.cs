@@ -26,7 +26,7 @@ namespace Simple.Data.MongoDBTest
         }
 
         [Test]
-        public void TestInsertWithStaticTypeObject()
+        public void TestUpdateWithStaticTypeObject()
         {
             var db = DatabaseHelper.Open();
 
@@ -38,7 +38,7 @@ namespace Simple.Data.MongoDBTest
         }
 
         [Test]
-        public void TestInsertWithDynamicTypeObject()
+        public void TestUpdateWithDynamicTypeObject()
         {
             var db = DatabaseHelper.Open();
 

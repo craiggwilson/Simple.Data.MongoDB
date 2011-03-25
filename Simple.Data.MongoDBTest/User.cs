@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using MongoDB.Bson.DefaultSerializer;
-
 namespace Simple.Data.MongoDBTest
 {
     class User
