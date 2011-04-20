@@ -37,9 +37,9 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\packages\mongocsharpdriver.1.0\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="Simple.Data, Version=0.5.5.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Simple.Data, Version=0.5.10.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Simple.Data.Core.0.5.5\lib\net40\Simple.Data.dll</HintPath>
+      <HintPath>..\packages\Simple.Data.Core.0.5.10\lib\net40\Simple.Data.dll</HintPath>
     </Reference>
     <Reference Include="Simple.Data.Ado">
       <HintPath>..\packages\Simple.Data.Core.0.5.0.2\lib\net40\Simple.Data.Ado.dll</HintPath>

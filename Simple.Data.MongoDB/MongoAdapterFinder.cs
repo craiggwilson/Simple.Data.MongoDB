@@ -21,11 +21,22 @@ namespace Simple.Data.MongoDB
 
         public IEnumerable<IDictionary<string, object>> Find(MongoCollection<BsonDocument> collection, SimpleExpression criteria)
         {
-            if (criteria == null) return FindAll(collection);
+            if (criteria == null) 
+                return FindAll(collection);
 
             var query = _expressionFormatter.Format(criteria);
 
             return collection.Find(query).Select(x => x.ToDictionary());
+        }
+
+        public IDictionary<string, object> FindOne(MongoCollection<BsonDocument> collection, SimpleExpression criteria)
+        {
+            if (criteria == null)
+                return collection.FindOne().ToDictionary();
+
+            var query = _expressionFormatter.Format(criteria);
+
+            return collection.FindOne(query).ToDictionary();
         }
 
         public IEnumerable<IDictionary<string, object>> FindAll(MongoCollection<BsonDocument> collection)

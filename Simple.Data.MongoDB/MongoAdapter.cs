@@ -26,6 +26,11 @@ namespace Simple.Data.MongoDB
             _expressionFormatter = new ExpressionFormatter(this);
         }
 
+        public override IDictionary<string, object> FindOne(string tableName, SimpleExpression criteria)
+        {
+            return new MongoAdapterFinder(this, _expressionFormatter).FindOne(GetCollection(tableName), criteria);
+        }
+
         public override IEnumerable<IDictionary<string, object>> Find(string tableName, SimpleExpression criteria)
         {
             return new MongoAdapterFinder(this, _expressionFormatter).Find(GetCollection(tableName), criteria);

@@ -27,10 +27,6 @@ namespace Simple.Data.MongoDBTest
 
         private static void InsertData(MongoDatabase db)
         {
-            //INSERT INTO [dbo].[Users] ([Id], [Name], [Password], [Age]) VALUES (1,'Bob','Bob',32)
-            //INSERT INTO [dbo].[Users] ([Id], [Name], [Password], [Age]) VALUES (2,'Charlie','Charlie',49)
-            //INSERT INTO [dbo].[Users] ([Id], [Name], [Password], [Age]) VALUES (3,'Dave','Dave',12)
-
             var users = new[] 
             {
                 new User { Id = 1, Name = "Bob", Password = "Bob", Age = 32, Address = new Address { Line = "123 Way", City = "Dallas", State = "TX" }, EmailAddresses = new List<string> { "bob@bob.com", "b@b.com" }, Dependents = new List<Dependent>{ new Dependent { Name = "Jane", Age = 12 }, new Dependent { Name = "Jimmy", Age = 11 } } },
