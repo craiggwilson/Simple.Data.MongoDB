@@ -38,24 +38,6 @@ namespace Simple.Data.MongoDBTest
         }
 
         [Test]
-        public void TestFindOne()
-        {
-            var db = DatabaseHelper.Open();
-            User user = db.Users.FindOne();
-            Assert.IsNotNull(user);
-            Assert.AreEqual(1, user.Id);
-        }
-
-        [Test]
-        public void TestFindOneWithCriteria()
-        {
-            var db = DatabaseHelper.Open();
-            User user = db.Users.FindOneById(2);
-            Assert.IsNotNull(user);
-            Assert.AreEqual(2, user.Id);
-        }
-
-        [Test]
         public void TestAnd()
         {
             var db = DatabaseHelper.Open();

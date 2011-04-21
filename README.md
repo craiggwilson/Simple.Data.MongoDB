@@ -7,6 +7,8 @@ This library is available via [nuget](http://www.nuget.org).
 
 ### Change Log
 
+* 4/20/2011 - 0.5.10
+  - Updated to v0.5.10 of Simple.Data.Core
 * 3/24/2011 - 0.5.5
   - Updated to v1.0 of mongodb-csharp
   - Updated to v0.5.5 of Simple.Data.Core

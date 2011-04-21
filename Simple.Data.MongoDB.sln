@@ -5,6 +5,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Data.MongoDB", "Simp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Data.MongoDBTest", "Simple.Data.MongoDBTest\Simple.Data.MongoDBTest.csproj", "{5388EF29-E3EE-422B-A95A-389D62AF038E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89F2AA19-DBD3-453C-8139-CBCC0FFC5E61}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		NuGet\Simple.Data.MongoDB\simple.data.mongodb.nuspec = NuGet\Simple.Data.MongoDB\simple.data.mongodb.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
