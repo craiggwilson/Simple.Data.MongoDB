@@ -28,27 +28,41 @@ namespace Simple.Data.MongoDB
 
         public override IDictionary<string, object> FindOne(string tableName, SimpleExpression criteria)
         {
-            return new MongoAdapterFinder(this, _expressionFormatter).FindOne(GetCollection(tableName), criteria);
+            return new MongoAdapterFinder(this, _expressionFormatter)
+                .FindOne(GetCollection(tableName), criteria);
         }
 
         public override IEnumerable<IDictionary<string, object>> Find(string tableName, SimpleExpression criteria)
         {
-            return new MongoAdapterFinder(this, _expressionFormatter).Find(GetCollection(tableName), criteria);
+            var query = new SimpleQuery(this, tableName)
+                .Where(criteria);
+
+            return new MongoAdapterFinder(this, _expressionFormatter)
+                .Find(GetCollection(tableName), query);
         }
 
         public override IDictionary<string, object> Insert(string tableName, IDictionary<string, object> data)
         {
-            return new MongoAdapterInserter(this).Insert(GetCollection(tableName), data);
+            return new MongoAdapterInserter(this)
+                .Insert(GetCollection(tableName), data);
+        }
+
+        public override IEnumerable<IDictionary<string, object>> RunQuery(SimpleQuery query)
+        {
+            return new MongoAdapterFinder(this, _expressionFormatter)
+                .Find(GetCollection(query.TableName), query);
         }
 
         public override int Update(string tableName, IDictionary<string, object> data, SimpleExpression criteria)
         {
-            return new MongoAdapterUpdater(this, _expressionFormatter).Update(GetCollection(tableName), data, criteria);
+            return new MongoAdapterUpdater(this, _expressionFormatter)
+                .Update(GetCollection(tableName), data, criteria);
         }
 
         public override int Delete(string tableName, SimpleExpression criteria)
         {
-            return new MongoAdapterDeleter(this, _expressionFormatter).Delete(GetCollection(tableName), criteria);
+            return new MongoAdapterDeleter(this, _expressionFormatter)
+                .Delete(GetCollection(tableName), criteria);
         }
 
         public override IEnumerable<string> GetKeyFieldNames(string tableName)

@@ -41,10 +41,10 @@ namespace Simple.Data.MongoDBTest
         public void TestAnd()
         {
             var db = DatabaseHelper.Open();
-            IEnumerable<User> users = db.Users.FindAll(db.Users.Age > 32 & db.Users.Name == "Dave").Cast<User>();
+            IEnumerable<User> users = db.Users.FindAll(db.Users.Age > 32 && db.Users.Name == "Dave").Cast<User>();
             Assert.AreEqual(1, users.Count());
         }
-
+        
         [Test]
         public void TestGreaterThan()
         {
@@ -97,8 +97,24 @@ namespace Simple.Data.MongoDBTest
         public void TestOr()
         {
             var db = DatabaseHelper.Open();
-            IEnumerable<User> users = db.Users.FindAll(db.Users.Age == 32 | db.Users.Name == "Dave").Cast<User>();
+            IEnumerable<User> users = db.Users.FindAll(db.Users.Age == 32 || db.Users.Name == "Dave").Cast<User>();
             Assert.AreEqual(2, users.Count());
+        }
+
+        [Test]
+        public void TestQuery()
+        {
+            var db = DatabaseHelper.Open();
+            IEnumerable<User> users = db.Users.All()
+                .OrderByDescending(db.Users.Age)
+                .ThenBy(db.Users.Name)
+                .Skip(1)
+                .Take(2)
+                .Cast<User>();
+
+            Assert.AreEqual(2, users.Count());
+            Assert.AreEqual("Dave", users.First().Name);
+            Assert.AreEqual("Bob", users.Last().Name);
         }
 
         [Test]

@@ -37,12 +37,9 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\packages\mongocsharpdriver.1.0\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="Simple.Data, Version=0.5.10.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Simple.Data, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Simple.Data.Core.0.5.10\lib\net40\Simple.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Simple.Data.Ado">
-      <HintPath>..\packages\Simple.Data.Core.0.5.0.2\lib\net40\Simple.Data.Ado.dll</HintPath>
+      <HintPath>..\packages\Simple.Data.Core.0.6.1\lib\net40\Simple.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -68,8 +65,8 @@
     <Compile Include="IExpressionFormatter.cs" />
     <Compile Include="MongoAdapter.cs" />
     <Compile Include="MongoAdapterDeleter.cs" />
-    <Compile Include="MongoAdapterFinder.cs" />
     <Compile Include="MongoAdapterInserter.cs" />
+    <Compile Include="MongoAdapterFinder.cs" />
     <Compile Include="MongoAdapterUpdater.cs" />
     <Compile Include="MongoIdKeyComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

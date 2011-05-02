@@ -46,12 +46,9 @@
     <Reference Include="pnunit.framework">
       <HintPath>..\packages\NUnit.2.5.9.10348\lib\pnunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Simple.Data, Version=0.5.10.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Simple.Data, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Simple.Data.Core.0.5.10\lib\net40\Simple.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Simple.Data.Ado">
-      <HintPath>..\packages\Simple.Data.Core.0.5.0.2\lib\net40\Simple.Data.Ado.dll</HintPath>
+      <HintPath>..\packages\Simple.Data.Core.0.6.1\lib\net40\Simple.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
