@@ -7,6 +7,9 @@ This library is available via [nuget](http://www.nuget.org).
 
 ### Change Log
 
+* 5/1/2011 - 0.6.1
+  - Updated to v0.6.1 of Simple.Data.Core which supports sorting and paging.
+  - Fixed a bug related to dynamic serialization.
 * 4/20/2011 - 0.5.10
   - Updated to v0.5.10 of Simple.Data.Core
 * 3/24/2011 - 0.5.5
