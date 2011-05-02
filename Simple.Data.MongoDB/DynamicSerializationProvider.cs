@@ -15,7 +15,7 @@ namespace Simple.Data.MongoDB
             if (typeof(IDynamicMetaObjectProvider).IsAssignableFrom(type))
                 return new DynamicBsonSerializer();
 
-            return BsonSerializer.LookupSerializer(type);
+            return null;
         }
     }
 }
