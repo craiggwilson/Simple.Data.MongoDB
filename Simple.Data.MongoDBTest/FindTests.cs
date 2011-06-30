@@ -105,7 +105,8 @@ namespace Simple.Data.MongoDBTest
         public void TestQuery()
         {
             var db = DatabaseHelper.Open();
-            IEnumerable<User> users = db.Users.All()
+            IEnumerable<User> users = db.Users.Query()
+                .Select(db.Users.Name)
                 .OrderByDescending(db.Users.Age)
                 .ThenBy(db.Users.Name)
                 .Skip(1)

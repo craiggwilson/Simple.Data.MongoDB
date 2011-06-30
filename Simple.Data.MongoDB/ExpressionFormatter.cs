@@ -13,7 +13,6 @@ namespace Simple.Data.MongoDB
     {
         private readonly Dictionary<string, Func<SimpleReference, SimpleFunction, QueryComplete>> _supportedFunctions;
             
-
         private readonly MongoAdapter _adapter;
 
         public ExpressionFormatter(MongoAdapter adapter)
@@ -120,23 +119,12 @@ namespace Simple.Data.MongoDB
 
         private object FormatObject(object operand)
         {
-            var reference = operand as SimpleReference;
+            var reference = operand as ObjectReference;
             if (!ReferenceEquals(reference, null))
             {
-                return GetFullDynamicReference(reference);
+                return GetFullName(reference);
             }
             return operand;
-        }
-
-        private string GetFullDynamicReference(SimpleReference reference)
-        {
-            var names = new Queue<string>();
-            foreach(var name in reference.ToString().Split('.').Skip(1))
-            {
-                var newName = name == "Id" || name == "id" ? "_id" : name;
-                names.Enqueue(newName);
-            }
-            return string.Join(".", names.ToArray());
         }
 
         private QueryComplete HandleLike(SimpleReference reference, SimpleFunction function)
@@ -168,6 +156,22 @@ namespace Simple.Data.MongoDB
             if (!(function.Args[0] is string)) throw new InvalidOperationException("StartsWith can only be used with a string.");
 
             return Query.Matches((string)FormatObject(reference), new BsonRegularExpression(".*" + (string)function.Args[0] + "$"));
+        }
+
+        internal static string GetFullName(ObjectReference reference)
+        {
+            var names = new Stack<string>();
+            string name;
+            while (!ReferenceEquals(reference.GetOwner(), null))
+            {
+                name = reference.GetName();
+                name = name == "Id" || name == "id" ? "_id" : name;
+                names.Push(name);
+
+                reference = reference.GetOwner();
+            }
+
+            return string.Join(".", names.ToArray());
         }
     }
 }
