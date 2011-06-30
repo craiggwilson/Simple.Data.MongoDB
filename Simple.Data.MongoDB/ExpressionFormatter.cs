@@ -11,7 +11,7 @@ namespace Simple.Data.MongoDB
 {
     class ExpressionFormatter : IExpressionFormatter
     {
-        private readonly Dictionary<string, Func<DynamicReference, SimpleFunction, QueryComplete>> _supportedFunctions;
+        private readonly Dictionary<string, Func<SimpleReference, SimpleFunction, QueryComplete>> _supportedFunctions;
             
 
         private readonly MongoAdapter _adapter;
@@ -20,7 +20,7 @@ namespace Simple.Data.MongoDB
         {
             _adapter = adapter;
 
-            _supportedFunctions = new Dictionary<string, Func<DynamicReference, SimpleFunction, QueryComplete>>(StringComparer.InvariantCultureIgnoreCase)
+            _supportedFunctions = new Dictionary<string, Func<SimpleReference, SimpleFunction, QueryComplete>>(StringComparer.InvariantCultureIgnoreCase)
             {
                 { "like", HandleLike },
                 { "startswith", HandleStartsWith },
@@ -86,11 +86,11 @@ namespace Simple.Data.MongoDB
             var function = expression.RightOperand as SimpleFunction;
             if (function == null) throw new InvalidOperationException("Expected SimpleFunction as the right operand.");
 
-            Func<DynamicReference, SimpleFunction, QueryComplete> handler;
+            Func<SimpleReference, SimpleFunction, QueryComplete> handler;
             if(!_supportedFunctions.TryGetValue(function.Name, out handler))
                 throw new NotSupportedException(string.Format("Unknown function '{0}'.", function.Name));
 
-            return handler((DynamicReference)expression.LeftOperand, function);
+            return handler((SimpleReference)expression.LeftOperand, function);
         }
 
         private QueryComplete LogicalExpression(SimpleExpression expression, Func<QueryComplete, QueryComplete, QueryComplete> builder)
@@ -120,7 +120,7 @@ namespace Simple.Data.MongoDB
 
         private object FormatObject(object operand)
         {
-            var reference = operand as DynamicReference;
+            var reference = operand as SimpleReference;
             if (!ReferenceEquals(reference, null))
             {
                 return GetFullDynamicReference(reference);
@@ -128,22 +128,18 @@ namespace Simple.Data.MongoDB
             return operand;
         }
 
-        private string GetFullDynamicReference(DynamicReference reference)
+        private string GetFullDynamicReference(SimpleReference reference)
         {
-            var names = new Stack<string>();
-            string name;
-            while(!ReferenceEquals(reference.GetOwner(), null))
+            var names = new Queue<string>();
+            foreach(var name in reference.ToString().Split('.').Skip(1))
             {
-                name = reference.GetName();
-                name = name == "Id" || name == "id" ? "_id" : name;
-                names.Push(name);
-                
-                reference = reference.GetOwner();
+                var newName = name == "Id" || name == "id" ? "_id" : name;
+                names.Enqueue(newName);
             }
             return string.Join(".", names.ToArray());
         }
 
-        private QueryComplete HandleLike(DynamicReference reference, SimpleFunction function)
+        private QueryComplete HandleLike(SimpleReference reference, SimpleFunction function)
         {
             if (function.Args[0] is Regex)
                 return Query.Matches((string)FormatObject(reference), new BsonRegularExpression((Regex)function.Args[0]));
@@ -153,21 +149,21 @@ namespace Simple.Data.MongoDB
             throw new InvalidOperationException("Like can only be used with a string or Regex.");
         }
 
-        private QueryComplete HandleStartsWith(DynamicReference reference, SimpleFunction function)
+        private QueryComplete HandleStartsWith(SimpleReference reference, SimpleFunction function)
         {
             if(!(function.Args[0] is string)) throw new InvalidOperationException("StartsWith can only be used with a string.");
          
             return Query.Matches((string)FormatObject(reference), new BsonRegularExpression("^" + (string)function.Args[0] + ".*"));
         }
 
-        private QueryComplete HandleContains(DynamicReference reference, SimpleFunction function)
+        private QueryComplete HandleContains(SimpleReference reference, SimpleFunction function)
         {
             if (!(function.Args[0] is string)) throw new InvalidOperationException("StartsWith can only be used with a string.");
 
             return Query.Matches((string)FormatObject(reference), new BsonRegularExpression("^.*" + (string)function.Args[0] + ".*$"));
         }
 
-        private QueryComplete HandleEndsWith(DynamicReference reference, SimpleFunction function)
+        private QueryComplete HandleEndsWith(SimpleReference reference, SimpleFunction function)
         {
             if (!(function.Args[0] is string)) throw new InvalidOperationException("StartsWith can only be used with a string.");
 

@@ -40,7 +40,9 @@ namespace Simple.Data.MongoDB
                 return collection.FindOne().ToDictionary();
 
             var mongoQuery = _expressionFormatter.Format(criteria);
-            return collection.FindOne(mongoQuery).ToDictionary();
+            var results = collection.FindOne(mongoQuery);
+
+            return results.ToDictionary();
         }
 
         private void ApplySorting(MongoCursor<BsonDocument> cursor, IEnumerable<SimpleOrderByItem> orderings)
