@@ -7,6 +7,9 @@ This library is available via [nuget](http://www.nuget.org).
 
 ### Change Log
 
+* 6/30/2011 - 0.6.8
+  - Updated to v0.6.8 of Simple.Data.Core to support field selection.
+  - Updated to v1.1 of the MongoDB csharp driver.
 * 5/1/2011 - 0.6.1
   - Updated to v0.6.1 of Simple.Data.Core which supports sorting and paging.
   - Fixed a bug related to dynamic serialization.
