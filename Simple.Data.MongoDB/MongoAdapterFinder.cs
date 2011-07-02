@@ -32,7 +32,9 @@ namespace Simple.Data.MongoDB
             ApplySkip(cursor, query.SkipCount);
             ApplyTake(cursor, query.TakeCount);
 
-            return cursor.Select(x => x.ToDictionary());
+            var aliases = query.Columns.OfType<ObjectReference>().ToDictionary(x => x.GetName(), x => x.Alias);
+
+            return cursor.Select(x => x.ToDictionary(aliases));
         }
 
         public IDictionary<string, object> FindOne(MongoCollection<BsonDocument> collection, SimpleExpression criteria)

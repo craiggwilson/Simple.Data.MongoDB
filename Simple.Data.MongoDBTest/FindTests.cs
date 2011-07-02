@@ -105,17 +105,17 @@ namespace Simple.Data.MongoDBTest
         public void TestQuery()
         {
             var db = DatabaseHelper.Open();
-            IEnumerable<User> users = db.Users.Query()
-                .Select(db.Users.Name)
+            List<dynamic> users = db.Users.Query()
+                .Select(db.Users.Name.As("FirstName"))
                 .OrderByDescending(db.Users.Age)
                 .ThenBy(db.Users.Name)
                 .Skip(1)
                 .Take(2)
-                .Cast<User>();
+                .ToList();
 
-            Assert.AreEqual(2, users.Count());
-            Assert.AreEqual("Dave", users.First().Name);
-            Assert.AreEqual("Bob", users.Last().Name);
+            Assert.AreEqual(2, users.Count);
+            Assert.AreEqual("Dave", users.First().FirstName);
+            Assert.AreEqual("Bob", users.Last().FirstName);
         }
 
         [Test]
