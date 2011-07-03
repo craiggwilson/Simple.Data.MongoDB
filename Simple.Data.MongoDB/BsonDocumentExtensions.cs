@@ -16,15 +16,18 @@ namespace Simple.Data.MongoDB
 
         public static IDictionary<string, object> ToDictionary(this BsonDocument document, IDictionary<string, string> aliases)
         {
-            return document.Elements.ToDictionary(x => aliases.ContainsKey(x.Name) ? aliases[x.Name] : x.Name, x => ConvertValue(x.Value), MongoIdKeyComparer.DefaultInstance);
+            return document.Elements.ToDictionary(x => aliases.ContainsKey(x.Name) ? aliases[x.Name] : x.Name, x => ConvertValue(x.Name, x.Value, aliases), MongoIdKeyComparer.DefaultInstance);
         }
 
-        private static object ConvertValue(BsonValue value)
+        private static object ConvertValue(string elementName, BsonValue value, IDictionary<string, string> aliases)
         {
             if (value.IsBsonDocument)
-                return value.AsBsonDocument.ToDictionary();
+            {
+                aliases = aliases.Where(x => x.Key.StartsWith(elementName + ".")).ToDictionary(x => x.Key.Remove(0, elementName.Length + 1), x => x.Value);
+                return value.AsBsonDocument.ToDictionary(aliases);
+            }
             if (value.IsBsonArray)
-                return value.AsBsonArray.Select(v => ConvertValue(v)).ToList();
+                return value.AsBsonArray.Select(v => ConvertValue(elementName, v, aliases)).ToList();
 
             return value.RawValue;
         }

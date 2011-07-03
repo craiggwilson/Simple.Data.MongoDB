@@ -106,7 +106,7 @@ namespace Simple.Data.MongoDBTest
         {
             var db = DatabaseHelper.Open();
             List<dynamic> users = db.Users.Query()
-                .Select(db.Users.Name.As("FirstName"))
+                .Select(db.Users.Name.As("FirstName"), db.Users.Address.City.As("cty"))
                 .OrderByDescending(db.Users.Age)
                 .ThenBy(db.Users.Name)
                 .Skip(1)

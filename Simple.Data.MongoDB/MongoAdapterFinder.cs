@@ -32,7 +32,7 @@ namespace Simple.Data.MongoDB
             ApplySkip(cursor, query.SkipCount);
             ApplyTake(cursor, query.TakeCount);
 
-            var aliases = query.Columns.OfType<ObjectReference>().ToDictionary(x => x.GetName(), x => x.Alias);
+            var aliases = query.Columns.OfType<ObjectReference>().ToDictionary(x => ExpressionFormatter.GetFullName(x), x => x.Alias);
 
             return cursor.Select(x => x.ToDictionary(aliases));
         }
