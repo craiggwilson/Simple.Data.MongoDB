@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmptyFindTests.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="DeleteTests.cs" />
     <Compile Include="FindTests.cs" />
