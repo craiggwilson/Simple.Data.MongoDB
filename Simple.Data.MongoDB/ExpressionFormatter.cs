@@ -11,6 +11,14 @@ namespace Simple.Data.MongoDB
 {
     class ExpressionFormatter : IExpressionFormatter
     {
+        internal static HashSet<string> _functions = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase)
+        {
+            "like",
+            "startswith",
+            "contains",
+            "endswith"
+        };
+
         private readonly Dictionary<string, Func<SimpleReference, SimpleFunction, QueryComplete>> _supportedFunctions;
             
         private readonly MongoAdapter _adapter;
@@ -33,7 +41,7 @@ namespace Simple.Data.MongoDB
             switch (expression.Type)
             {
                 case SimpleExpressionType.And:
-                    return LogicalExpression(expression, (l, r) => Query.And(l,r));
+                    return LogicalExpression(expression, (l, r) => Query.And(l, r));
                 case SimpleExpressionType.Equal:
                     return EqualExpression(expression);
                 case SimpleExpressionType.GreaterThan:
@@ -49,7 +57,7 @@ namespace Simple.Data.MongoDB
                 case SimpleExpressionType.NotEqual:
                     return NotEqualExpression(expression);
                 case SimpleExpressionType.Or:
-                    return LogicalExpression(expression, (l, r) => Query.Or(l,r));
+                    return LogicalExpression(expression, (l, r) => Query.Or(l, r));
             }
 
             throw new NotSupportedException();

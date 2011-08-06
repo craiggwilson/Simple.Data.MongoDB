@@ -26,6 +26,12 @@ namespace Simple.Data.MongoDB
             _expressionFormatter = new ExpressionFormatter(this);
         }
 
+        public override int Delete(string tableName, SimpleExpression criteria)
+        {
+            return new MongoAdapterDeleter(this, _expressionFormatter)
+                .Delete(GetCollection(tableName), criteria);
+        }
+
         public override IDictionary<string, object> FindOne(string tableName, SimpleExpression criteria)
         {
             return new MongoAdapterFinder(this, _expressionFormatter)
@@ -37,8 +43,14 @@ namespace Simple.Data.MongoDB
             var query = new SimpleQuery(this, tableName)
                 .Where(criteria);
 
+            IEnumerable<SimpleQueryClauseBase> unhandledClauses;
             return new MongoAdapterFinder(this, _expressionFormatter)
-                .Find(GetCollection(tableName), query);
+                .Find(GetCollection(tableName), query, out unhandledClauses);
+        }
+
+        public override IEnumerable<string> GetKeyFieldNames(string tableName)
+        {
+            yield return "Id";
         }
 
         public override IDictionary<string, object> Insert(string tableName, IDictionary<string, object> data)
@@ -47,27 +59,32 @@ namespace Simple.Data.MongoDB
                 .Insert(GetCollection(tableName), data);
         }
 
-        public override IEnumerable<IDictionary<string, object>> RunQuery(SimpleQuery query)
+        public override bool IsExpressionFunction(string functionName, params object[] args)
+        {
+            return ExpressionFormatter._functions.Contains(functionName);
+        }
+
+        public override IEnumerable<IDictionary<string, object>> RunQuery(SimpleQuery query, out IEnumerable<SimpleQueryClauseBase> unhandledClauses)
         {
             return new MongoAdapterFinder(this, _expressionFormatter)
-                .Find(GetCollection(query.TableName), query);
+                .Find(GetCollection(query.TableName), query, out unhandledClauses);
+        }
+
+        public override IEnumerable<IEnumerable<IDictionary<string, object>>> RunQueries(SimpleQuery[] queries, List<IEnumerable<SimpleQueryClauseBase>> unhandledClauses)
+        {
+            foreach(var query in queries)
+            {
+                IEnumerable<SimpleQueryClauseBase> clauses;
+                var result = RunQuery(query, out clauses);
+                unhandledClauses.Add(clauses);
+                yield return result;
+            }
         }
 
         public override int Update(string tableName, IDictionary<string, object> data, SimpleExpression criteria)
         {
             return new MongoAdapterUpdater(this, _expressionFormatter)
                 .Update(GetCollection(tableName), data, criteria);
-        }
-
-        public override int Delete(string tableName, SimpleExpression criteria)
-        {
-            return new MongoAdapterDeleter(this, _expressionFormatter)
-                .Delete(GetCollection(tableName), criteria);
-        }
-
-        public override IEnumerable<string> GetKeyFieldNames(string tableName)
-        {
-            yield return "Id";
         }
 
         internal MongoDatabase GetDatabase()
