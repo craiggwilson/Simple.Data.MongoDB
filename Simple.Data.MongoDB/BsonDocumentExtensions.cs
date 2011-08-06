@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using MongoDB.Bson;
 
 namespace Simple.Data.MongoDB
@@ -16,6 +13,8 @@ namespace Simple.Data.MongoDB
 
         public static IDictionary<string, object> ToDictionary(this BsonDocument document, IDictionary<string, string> aliases)
         {
+            if (document == null) return null;
+
             return document.Elements.ToDictionary(x => aliases.ContainsKey(x.Name) ? aliases[x.Name] : x.Name, x => ConvertValue(x.Name, x.Value, aliases), MongoIdKeyComparer.DefaultInstance);
         }
 

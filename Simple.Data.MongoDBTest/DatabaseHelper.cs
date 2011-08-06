@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using MongoDB.Bson.Serialization;
+﻿using System.Collections.Generic;
 using MongoDB.Driver;
-
 using Simple.Data.MongoDB;
 
 namespace Simple.Data.MongoDBTest
@@ -23,6 +17,13 @@ namespace Simple.Data.MongoDBTest
             server.Connect();
             server.DropDatabase("simpleDataTests");
             InsertData(server.GetDatabase("simpleDataTests"));
+        }
+
+        public static void Empty()
+        {
+            var server = MongoServer.Create("mongodb://localhost/?safe=true");
+            server.Connect();
+            server.DropDatabase("simpleDataTests");
         }
 
         private static void InsertData(MongoDatabase db)
