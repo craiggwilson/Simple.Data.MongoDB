@@ -104,6 +104,8 @@ namespace Simple.Data.MongoDBTest
         [Test]
         public void TestQuery()
         {
+            Future<int> totalCount;
+
             var db = DatabaseHelper.Open();
             List<dynamic> users = db.Users.Query()
                 .Select(db.Users.Name.As("FirstName"), db.Users.Address.City.As("cty"))
@@ -111,8 +113,10 @@ namespace Simple.Data.MongoDBTest
                 .ThenBy(db.Users.Name)
                 .Skip(1)
                 .Take(2)
+                .WithTotalCount(out totalCount)
                 .ToList();
 
+            Assert.AreEqual(3, totalCount.Value);
             Assert.AreEqual(2, users.Count);
             Assert.AreEqual("Dave", users.First().FirstName);
             Assert.AreEqual("Bob", users.Last().FirstName);

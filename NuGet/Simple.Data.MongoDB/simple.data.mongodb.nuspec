@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>Simple.Data.MongoDB</id> 
-    <version>0.8.5</version> 
+    <version>0.8.5.1</version> 
     <authors>Craig Wilson</authors> 
     <owners>Craig Wilson</owners>
     <description>MongoDB provider for the Simple.Data data access library.</description> 

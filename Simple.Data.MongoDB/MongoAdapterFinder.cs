@@ -22,20 +22,34 @@ namespace Simple.Data.MongoDB
 
         public IEnumerable<IDictionary<string, object>> Find(MongoCollection<BsonDocument> collection, SimpleQuery query, out IEnumerable<SimpleQueryClauseBase> unhandledClauses)
         {
-            var queryCriteria = new QueryCriteria();
-            unhandledClauses = queryCriteria.Apply(query.Clauses);
+            var builder = MongoQueryBuilder.BuildFrom(query);
 
-            if (!queryCriteria.SkipCount.HasValue && queryCriteria.TakeCount.HasValue && queryCriteria.TakeCount.Value == 1)
-                return new[] { FindOne(collection, queryCriteria.Criteria) };
+            unhandledClauses = builder.UnprocessedClauses;
 
-            var cursor = CreateCursor(collection, queryCriteria.Criteria);
+            if (builder.IsTotalCountQuery)
+            {
+                int count;
+                if (builder.Criteria == null)
+                    count = collection.Count();
+                else
+                    count = collection.Count(_expressionFormatter.Format(builder.Criteria));
 
-            ApplyFields(cursor, queryCriteria.Columns);
-            ApplySorting(cursor, queryCriteria.Order);
-            ApplySkip(cursor, queryCriteria.SkipCount);
-            ApplyTake(cursor, queryCriteria.TakeCount);
+                return new[] { new Dictionary<string, object> { { "COUNT", count } } };
+            }
 
-            var aliases = queryCriteria.Columns.OfType<ObjectReference>().ToDictionary(x => ExpressionFormatter.GetFullName(x), x => x.Alias);
+            if (!builder.SkipCount.HasValue && builder.TakeCount.HasValue && builder.TakeCount.Value == 1)
+                return new[] { FindOne(collection, builder.Criteria) };
+
+            var cursor = CreateCursor(collection, builder.Criteria);
+
+            ApplyFields(cursor, builder.Columns);
+            ApplySorting(cursor, builder.Order);
+            ApplySkip(cursor, builder.SkipCount);
+            ApplyTake(cursor, builder.TakeCount);
+
+            var aliases = builder.Columns.OfType<ObjectReference>().ToDictionary(x => ExpressionFormatter.GetFullName(x), x => x.Alias);
+
+            
 
             return cursor.Select(x => x.ToDictionary(aliases));
         }
@@ -99,109 +113,6 @@ namespace Simple.Data.MongoDB
 
             var mongoQuery = _expressionFormatter.Format(criteria);
             return collection.Find(mongoQuery);
-        }
-
-        private class QueryCriteria
-        {
-            public IEnumerable<SimpleReference> Columns { get; private set; }
-
-            public SimpleExpression Criteria { get; private set; }
-
-            public IEnumerable<SimpleOrderByItem> Order { get; private set; }
-
-            public int? SkipCount { get; private set; }
-
-            public int? TakeCount { get; private set; }
-
-            public QueryCriteria()
-            {
-                Columns = Enumerable.Empty<SimpleReference>();
-                Order = Enumerable.Empty<SimpleOrderByItem>();
-            }
-
-            public IEnumerable<SimpleQueryClauseBase> Apply(IEnumerable<SimpleQueryClauseBase> clauses)
-            {
-                clauses = ApplyOrderClauses(clauses);
-                clauses = ApplySelectClauses(clauses);
-                clauses = ApplySkipClauses(clauses);
-                clauses = ApplyTakeClauses(clauses);
-                clauses = ApplyWhereClauses(clauses);
-                return clauses;
-            }
-
-            private IEnumerable<SimpleQueryClauseBase> ApplyOrderClauses(IEnumerable<SimpleQueryClauseBase> clauses)
-            {
-                var list = clauses.OfType<OrderByClause>().ToList();
-
-                var order = new List<SimpleOrderByItem>();
-                foreach (var clause in list)
-                    order.Add(new SimpleOrderByItem(clause.Reference, clause.Direction));
-
-                Order = order;
-
-                return clauses.Where(x => !list.Contains(x));
-            }
-
-            private IEnumerable<SimpleQueryClauseBase> ApplySelectClauses(IEnumerable<SimpleQueryClauseBase> clauses)
-            {
-                var list = clauses.OfType<SelectClause>().ToList();
-
-                Columns = list.SelectMany(x => x.Columns);
-
-                return clauses.Where(x => !list.Contains(x));
-            }
-
-            private IEnumerable<SimpleQueryClauseBase> ApplySkipClauses(IEnumerable<SimpleQueryClauseBase> clauses)
-            {
-                var list = clauses.OfType<SkipClause>().ToList();
-
-                if (list.Count == 1)
-                {
-                    SkipCount = list[0].Count;
-                }
-                else if (list.Count > 1)
-                {
-                    throw new NotSupportedException("MongoDB does not support multiple skip counts.");
-                }
-
-                return clauses.Where(x => !list.Contains(x));
-            }
-
-            private IEnumerable<SimpleQueryClauseBase> ApplyTakeClauses(IEnumerable<SimpleQueryClauseBase> clauses)
-            {
-                var list = clauses.OfType<TakeClause>().ToList();
-
-                if (list.Count == 1)
-                {
-                    TakeCount = list[0].Count;
-                }
-                else if (list.Count > 1)
-                {
-                    throw new NotSupportedException("MongoDB does not support multiple take counts.");
-                }
-
-                return clauses.Where(x => !list.Contains(x));
-            }
-
-            private IEnumerable<SimpleQueryClauseBase> ApplyWhereClauses(IEnumerable<SimpleQueryClauseBase> clauses)
-            {
-                var list = clauses.OfType<WhereClause>().ToList();
-
-                if (list.Count == 1)
-                { 
-                    Criteria = list[0].Criteria;
-                }
-                else if (list.Count > 1)
-                {
-                    var criteria = new SimpleExpression(list[0], list[1], SimpleExpressionType.And);
-                    for (int i = 2; i < list.Count; i++)
-                        criteria = new SimpleExpression(criteria, list[i], SimpleExpressionType.And);
-
-                    Criteria = criteria;
-                }
-
-                return clauses.Where(x => !list.Contains(x));
-            }
         }
     }
 }
