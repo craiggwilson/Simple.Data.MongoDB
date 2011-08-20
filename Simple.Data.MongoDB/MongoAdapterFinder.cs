@@ -34,7 +34,7 @@ namespace Simple.Data.MongoDB
                 else
                     count = collection.Count(_expressionFormatter.Format(builder.Criteria));
 
-                return new[] { new Dictionary<string, object> { { "COUNT", count } } };
+                builder.SetTotalCount(count);
             }
 
             if (!builder.SkipCount.HasValue && builder.TakeCount.HasValue && builder.TakeCount.Value == 1)
@@ -48,8 +48,6 @@ namespace Simple.Data.MongoDB
             ApplyTake(cursor, builder.TakeCount);
 
             var aliases = builder.Columns.OfType<ObjectReference>().ToDictionary(x => ExpressionFormatter.GetFullName(x), x => x.Alias);
-
-            
 
             return cursor.Select(x => x.ToDictionary(aliases));
         }

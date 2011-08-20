@@ -9,9 +9,9 @@ using MongoDB.Driver.Builders;
 
 namespace Simple.Data.MongoDB
 {
-    class ExpressionFormatter : IExpressionFormatter
+    internal class ExpressionFormatter : IExpressionFormatter
     {
-        internal static HashSet<string> _functions = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase)
+        public static HashSet<string> _functions = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase)
         {
             "like",
             "startswith",

@@ -37,6 +37,8 @@ namespace Simple.Data.MongoDB
 
         public int? TakeCount { get; private set; }
 
+        public Action<int> SetTotalCount { get; private set; }
+
         public IEnumerable<SimpleQueryClauseBase> UnprocessedClauses { get; private set; }
 
         public MongoQueryBuilder()
@@ -85,12 +87,6 @@ namespace Simple.Data.MongoDB
 
         private bool TryApplySelectClause(SelectClause clause)
         {
-            if (_processedClauses.Any() && _processedClauses.Peek() is WithCountClause)
-            {
-                IsTotalCountQuery = true;
-                return true;
-            }
-
             if(_columns.Any())
                 return false;
 
@@ -132,6 +128,8 @@ namespace Simple.Data.MongoDB
 
         private bool TryApplyWithCountClause(WithCountClause clause)
         {
+            IsTotalCountQuery = true;
+            SetTotalCount = clause.SetCount;
             return true;
         }
     }
