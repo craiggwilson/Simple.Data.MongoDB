@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>Simple.Data.MongoDB</id> 
-    <version>0.8.5.1</version> 
+    <version>0.9.1</version> 
     <authors>Craig Wilson</authors> 
     <owners>Craig Wilson</owners>
     <description>MongoDB provider for the Simple.Data data access library.</description> 
@@ -12,7 +12,7 @@
     <language>en-US</language> 
 	<dependencies>
       <dependency id="mongocsharpdriver" version="1.1" />
-      <dependency id="Simple.Data.Core" version="0.8.5" />
+      <dependency id="Simple.Data.Core" version="0.9.1.1" />
     </dependencies>
  </metadata> 
 </package>

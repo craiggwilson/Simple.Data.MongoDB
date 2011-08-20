@@ -6,6 +6,8 @@ This is the mongodb adapter for the [Simple.Data](https://github.com/markrendle/
 This library is available via [nuget](http://www.nuget.org).
 
 ### Change Log
+* 8/20/2011 - 0.9.1
+  - Updated to v0.9.1.1 of Simple.Data.Core.
 * 8/6/2011 - 0.8.5.1
   - Added support for the WithTotalCount clause.
 * 8/6/2011 - 0.8.5
