@@ -48,11 +48,6 @@ namespace Simple.Data.MongoDB
                 .Find(GetCollection(tableName), query, out unhandledClauses);
         }
 
-        public override IEnumerable<string> GetKeyFieldNames(string tableName)
-        {
-            yield return "Id";
-        }
-
         public override IDictionary<string, object> Insert(string tableName, IDictionary<string, object> data)
         {
             return new MongoAdapterInserter(this)
@@ -70,15 +65,10 @@ namespace Simple.Data.MongoDB
                 .Find(GetCollection(query.TableName), query, out unhandledClauses);
         }
 
-        public override IEnumerable<IEnumerable<IDictionary<string, object>>> RunQueries(SimpleQuery[] queries, List<IEnumerable<SimpleQueryClauseBase>> unhandledClauses)
+        public override int Update(string tableName, IDictionary<string, object> data)
         {
-            foreach(var query in queries)
-            {
-                IEnumerable<SimpleQueryClauseBase> clauses;
-                var result = RunQuery(query, out clauses);
-                unhandledClauses.Add(clauses);
-                yield return result;
-            }
+            var criteria = GetCriteria(tableName, new [] { "Id" }, data);
+            return Update(tableName, data, criteria);
         }
 
         public override int Update(string tableName, IDictionary<string, object> data, SimpleExpression criteria)
