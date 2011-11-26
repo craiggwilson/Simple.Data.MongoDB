@@ -28,13 +28,14 @@ namespace Simple.Data.MongoDB
 
             if (builder.IsTotalCountQuery)
             {
-                int count;
+                long count;
                 if (builder.Criteria == null)
                     count = collection.Count();
                 else
                     count = collection.Count(_expressionFormatter.Format(builder.Criteria));
 
-                builder.SetTotalCount(count);
+                //TODO: figure out how to make count a long
+                builder.SetTotalCount((int)count);
             }
 
             if (!builder.SkipCount.HasValue && builder.TakeCount.HasValue && builder.TakeCount.Value == 1)
@@ -47,20 +48,20 @@ namespace Simple.Data.MongoDB
             ApplySkip(cursor, builder.SkipCount);
             ApplyTake(cursor, builder.TakeCount);
 
-            var aliases = builder.Columns.OfType<ObjectReference>().ToDictionary(x => ExpressionFormatter.GetFullName(x), x => x.Alias);
+            var aliases = builder.Columns.OfType<ObjectReference>().ToDictionary(x => ExpressionFormatter.GetFullName(x), x => x.GetAlias());
 
-            return cursor.Select(x => x.ToDictionary(aliases));
+            return cursor.Select(x => x.ToSimpleDictionary(aliases));
         }
 
         public IDictionary<string, object> FindOne(MongoCollection<BsonDocument> collection, SimpleExpression criteria)
         {
             if (criteria == null)
-                return collection.FindOne().ToDictionary();
+                return collection.FindOne().ToSimpleDictionary();
 
             var mongoQuery = _expressionFormatter.Format(criteria);
             var results = collection.FindOne(mongoQuery);
 
-            return results.ToDictionary();
+            return results.ToSimpleDictionary();
         }
 
         private void ApplyFields(MongoCursor<BsonDocument> cursor, IEnumerable<SimpleReference> columns)
@@ -69,7 +70,7 @@ namespace Simple.Data.MongoDB
                 return;
 
             var fields = columns.Select(x => string.Join(".", x.ToString().Split('.').Skip(1)))
-                .Select(x => (x == "Id" || x == "id") ? "_id" : x);
+                .Select(x => MongoIdKeyComparer.DefaultInstance.Equals(x, "id") ? "_id" : x);
 
             cursor.SetFields(fields.ToArray());
         }

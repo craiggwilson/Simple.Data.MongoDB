@@ -27,7 +27,7 @@ namespace Simple.Data.MongoDB
 
             var result = collection.Remove(condition);
             if (result != null)
-                return result.DocumentsAffected;
+                return (int)result.DocumentsAffected;
 
             return int.MaxValue;
         }

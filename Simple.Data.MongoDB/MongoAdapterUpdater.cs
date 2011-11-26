@@ -35,7 +35,7 @@ namespace Simple.Data.MongoDB
 
             var result = collection.Update(condition, update, UpdateFlags.Multi);
             if (result != null)
-                return result.DocumentsAffected;
+                return (int)result.DocumentsAffected;
 
             return int.MaxValue;
         }

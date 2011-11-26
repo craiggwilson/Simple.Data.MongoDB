@@ -48,6 +48,11 @@ namespace Simple.Data.MongoDB
                 .Find(GetCollection(tableName), query, out unhandledClauses);
         }
 
+        public override IDictionary<string, object> Get(string tableName, params object[] keyValues)
+        {
+            return FindOne(tableName, new SimpleExpression("_id", keyValues[0], SimpleExpressionType.Equal));
+        }
+
         public override IDictionary<string, object> Insert(string tableName, IDictionary<string, object> data)
         {
             return new MongoAdapterInserter(this)

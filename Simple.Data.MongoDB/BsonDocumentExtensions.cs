@@ -6,12 +6,12 @@ namespace Simple.Data.MongoDB
 {
     public static class BsonDocumentExtensions
     {
-        public static IDictionary<string, object> ToDictionary(this BsonDocument document)
+        public static IDictionary<string, object> ToSimpleDictionary(this BsonDocument document)
         {
-            return ToDictionary(document, new Dictionary<string, string>());
+            return ToSimpleDictionary(document, new Dictionary<string, string>());
         }
 
-        public static IDictionary<string, object> ToDictionary(this BsonDocument document, IDictionary<string, string> aliases)
+        public static IDictionary<string, object> ToSimpleDictionary(this BsonDocument document, IDictionary<string, string> aliases)
         {
             if (document == null) return null;
 
@@ -23,7 +23,7 @@ namespace Simple.Data.MongoDB
             if (value.IsBsonDocument)
             {
                 aliases = aliases.Where(x => x.Key.StartsWith(elementName + ".")).ToDictionary(x => x.Key.Remove(0, elementName.Length + 1), x => x.Value);
-                return value.AsBsonDocument.ToDictionary(aliases);
+                return value.AsBsonDocument.ToSimpleDictionary(aliases);
             }
             if (value.IsBsonArray)
                 return value.AsBsonArray.Select(v => ConvertValue(elementName, v, aliases)).ToList();
