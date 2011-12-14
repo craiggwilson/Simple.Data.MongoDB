@@ -53,7 +53,7 @@ namespace Simple.Data.MongoDB
             return FindOne(tableName, new SimpleExpression("_id", keyValues[0], SimpleExpressionType.Equal));
         }
 
-        public override IDictionary<string, object> Insert(string tableName, IDictionary<string, object> data)
+        public override IDictionary<string, object> Insert(string tableName, IDictionary<string, object> data, bool resultRequired)
         {
             return new MongoAdapterInserter(this)
                 .Insert(GetCollection(tableName), data);
