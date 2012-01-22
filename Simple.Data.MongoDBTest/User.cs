@@ -9,6 +9,7 @@ namespace Simple.Data.MongoDBTest
         public string Name { get; set; }
         public string Password { get; set; }
         public int Age { get; set; }
+        public DateTime LastLoginDate { get; set; }
 
         public Address Address { get; set; }
 
