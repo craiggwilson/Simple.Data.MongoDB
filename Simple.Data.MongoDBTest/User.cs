@@ -8,6 +8,7 @@ namespace Simple.Data.MongoDBTest
         public int Id { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
+        public byte[] EncryptedPassword { get; set; }
         public int Age { get; set; }
         public DateTime LastLoginDate { get; set; }
 
