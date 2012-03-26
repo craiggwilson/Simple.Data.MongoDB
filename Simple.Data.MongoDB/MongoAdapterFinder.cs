@@ -53,6 +53,17 @@ namespace Simple.Data.MongoDB
             return cursor.Select(x => x.ToSimpleDictionary(aliases));
         }
 
+        public IEnumerable<IDictionary<string, object>> Find(MongoCollection<BsonDocument> collection, SimpleExpression criteria)
+        {
+            if (criteria == null)
+                return collection.FindAll().Select(x => x.ToSimpleDictionary());
+
+            var mongoQuery = _expressionFormatter.Format(criteria);
+            var results = collection.Find(mongoQuery);
+
+            return results.Select(x => x.ToSimpleDictionary());
+        }
+
         public IDictionary<string, object> FindOne(MongoCollection<BsonDocument> collection, SimpleExpression criteria)
         {
             if (criteria == null)

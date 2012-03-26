@@ -40,12 +40,8 @@ namespace Simple.Data.MongoDB
 
         public override IEnumerable<IDictionary<string, object>> Find(string tableName, SimpleExpression criteria)
         {
-            var query = new SimpleQuery(this, tableName)
-                .Where(criteria);
-
-            IEnumerable<SimpleQueryClauseBase> unhandledClauses;
             return new MongoAdapterFinder(this, _expressionFormatter)
-                .Find(GetCollection(tableName), query, out unhandledClauses);
+                .Find(GetCollection(tableName), criteria);
         }
 
         public override IDictionary<string, object> Get(string tableName, params object[] keyValues)

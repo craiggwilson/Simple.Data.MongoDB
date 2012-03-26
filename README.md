@@ -6,6 +6,8 @@ This is the mongodb adapter for the [Simple.Data](https://github.com/markrendle/
 This library is available via [nuget](http://www.nuget.org).
 
 ### Change Log
+* 3/26/2012 - 0.14.0.3
+  - Updated to v0.14.0.3 of Simple.Data.Core
 * 1/22/2012 - 0.12.0.1
   - Fixed a bug due to misuse of the mongo csharp driver.
 * 1/16/2012 - 0.12.0.0
