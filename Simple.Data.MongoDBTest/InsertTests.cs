@@ -23,12 +23,16 @@ namespace Simple.Data.MongoDBTest
 
             dynamic address = new ExpandoObject();
             address.Line = "456 Way";
-            var user = db.Users.Insert(Id: 4, Name: "Ford", Password: "hoopy", Age: 29, Address: address);
+            db.Users.Insert(Id: 4, Name: "Ford", Password: "hoopy", Age: 29, Address: address, EmailAddresses: new List<string> { "jack@mcjack.com", "bob@mcbob.com" });
+
+            var user = db.Users.FindById(4);
 
             Assert.IsNotNull(user);
             Assert.AreEqual("Ford", user.Name);
             Assert.AreEqual("hoopy", user.Password);
             Assert.AreEqual(29, user.Age);
+            Assert.IsNotNull(user.EmailAddresses);
+            Assert.AreEqual("bob@mcbob.com", user.EmailAddresses[1]);
         }
 
         [Test]
@@ -36,14 +40,18 @@ namespace Simple.Data.MongoDBTest
         {
             var db = DatabaseHelper.Open();
 
-            var user = new User { Id = 4, Name = "Zaphod", Password = "zarquon", Age = 42, Address = new Address { State = "TX" } };
+            var user = new User { Id = 4, Name = "Zaphod", Password = "zarquon", Age = 42, Address = new Address { State = "TX" }, EmailAddresses = new List<string> { "jack@mcjack.com", "bob@mcbob.com" } };
 
-            var actual = db.Users.Insert(user);
+            db.Users.Insert(user);
+
+            User actual = db.Users.FindById(4);
 
             Assert.IsNotNull(user);
             Assert.AreEqual("Zaphod", actual.Name);
             Assert.AreEqual("zarquon", actual.Password);
             Assert.AreEqual(42, actual.Age);
+            Assert.IsNotNull(user.EmailAddresses);
+            Assert.AreEqual("bob@mcbob.com", user.EmailAddresses[1]);
         }
 
         [Test]
@@ -58,8 +66,11 @@ namespace Simple.Data.MongoDBTest
             user.Age = 42000000;
             user.Address = new ExpandoObject();
             user.Address.City = "Los Angeles";
+            user.EmailAddresses = new List<string> { "jack@mcjack.com", "bob@mcbob.com" };
 
-            var actual = db.Users.Insert(user);
+            db.Users.Insert(user);
+
+            var actual = db.Users.FindById(4);
 
             Assert.IsNotNull(user);
             Assert.AreEqual("Marvin", actual.Name);
