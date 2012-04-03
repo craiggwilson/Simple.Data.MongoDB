@@ -211,5 +211,14 @@ namespace Simple.Data.MongoDBTest
                 Assert.IsNotNull(user);
             }
         }
+
+        [Test]
+        public void TestCastingToByteArray()
+        {
+            var encoding = new UTF8Encoding();
+            var db = DatabaseHelper.Open();
+            User user = db.Users.FindById(1);
+            Assert.AreEqual(encoding.GetBytes(user.Password), user.EncryptedPassword);
+        }
     }
 }

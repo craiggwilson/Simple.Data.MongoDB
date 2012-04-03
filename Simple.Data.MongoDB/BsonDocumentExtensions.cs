@@ -43,7 +43,9 @@ namespace Simple.Data.MongoDB
                 return value.AsObjectId;
             else if (value.IsString)
                 return value.AsString;
-
+            else if (value.BsonType == BsonType.Binary)
+                 return value.AsByteArray;
+ 
             return value.RawValue;
         }
     }
