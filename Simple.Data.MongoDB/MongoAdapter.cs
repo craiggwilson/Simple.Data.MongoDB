@@ -49,6 +49,23 @@ namespace Simple.Data.MongoDB
             return FindOne(tableName, new SimpleExpression("_id", keyValues[0], SimpleExpressionType.Equal));
         }
 
+        public override IDictionary<string, object> GetKey(string tableName, IDictionary<string, object> record)
+        {
+            var result = new Dictionary<string, object>();
+            var idPair = MongoIdKeys.FindId(record);
+            if (idPair.HasValue)
+            {
+                result.Add(idPair.Value.Key, idPair.Value.Value);
+            }
+
+            return result;
+        }
+
+        public override IList<string> GetKeyNames(string tableName)
+        {
+            return new List<string> { "_id" };
+        }
+
         public override IDictionary<string, object> Insert(string tableName, IDictionary<string, object> data, bool resultRequired)
         {
             return new MongoAdapterInserter(this)
@@ -64,12 +81,6 @@ namespace Simple.Data.MongoDB
         {
             return new MongoAdapterFinder(this, _expressionFormatter)
                 .Find(GetCollection(query.TableName), query, out unhandledClauses);
-        }
-
-        public override int Update(string tableName, IDictionary<string, object> data)
-        {
-            var criteria = GetCriteria(tableName, new [] { "Id" }, data);
-            return Update(tableName, data, criteria);
         }
 
         public override int Update(string tableName, IDictionary<string, object> data, SimpleExpression criteria)

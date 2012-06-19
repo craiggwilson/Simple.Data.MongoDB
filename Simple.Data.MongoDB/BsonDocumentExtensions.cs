@@ -15,7 +15,7 @@ namespace Simple.Data.MongoDB
         {
             if (document == null) return null;
 
-            return document.Elements.ToDictionary(x => aliases.ContainsKey(x.Name) ? aliases[x.Name] : x.Name, x => ConvertValue(x.Name, x.Value, aliases), MongoIdKeyComparer.DefaultInstance);
+            return document.Elements.ToDictionary(x => aliases.ContainsKey(x.Name) ? aliases[x.Name] : x.Name, x => ConvertValue(x.Name, x.Value, aliases), MongoIdKeys.Comparer);
         }
 
         private static object ConvertValue(string elementName, BsonValue value, IDictionary<string, string> aliases)

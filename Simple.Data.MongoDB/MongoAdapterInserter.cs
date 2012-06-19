@@ -20,11 +20,7 @@ namespace Simple.Data.MongoDB
 
         public IDictionary<string, object> Insert(MongoCollection<BsonDocument> collection, IDictionary<string, object> data)
         {
-            if (data.ContainsKey("Id"))
-            {
-                data["_id"] = data["Id"];
-                data.Remove("Id");
-            }
+            MongoIdKeys.ReplaceId(data);
 
             var doc = data.ToBsonDocument();
             collection.Insert(doc);

@@ -25,11 +25,7 @@ namespace Simple.Data.MongoDB
         {
             var condition = _expressionFormatter.Format(criteria);
 
-            if (data.ContainsKey("Id"))
-            {
-                data["_id"] = data["Id"];
-                data.Remove("Id");
-            }
+            MongoIdKeys.ReplaceId(data);
 
             var update = new UpdateDocument("$set", data.ToBsonDocument());
 

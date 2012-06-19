@@ -81,7 +81,7 @@ namespace Simple.Data.MongoDB
                 return;
 
             var fields = columns.Select(x => string.Join(".", x.ToString().Split('.').Skip(1)))
-                .Select(x => MongoIdKeyComparer.DefaultInstance.Equals(x, "id") ? "_id" : x);
+                .Select(x => MongoIdKeys.Comparer.Equals(x, "id") ? "_id" : x);
 
             cursor.SetFields(fields.ToArray());
         }
