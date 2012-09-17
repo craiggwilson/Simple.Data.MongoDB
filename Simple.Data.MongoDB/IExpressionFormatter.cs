@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using MongoDB.Driver.Builders;
+using MongoDB.Driver;
 
 namespace Simple.Data.MongoDB
 {
     public interface IExpressionFormatter
     {
-        QueryComplete Format(SimpleExpression expressions);
+        IMongoQuery Format(SimpleExpression expressions);
     }
 }

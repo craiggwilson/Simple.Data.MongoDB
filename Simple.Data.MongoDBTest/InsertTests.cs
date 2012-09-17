@@ -72,10 +72,12 @@ namespace Simple.Data.MongoDBTest
 
             var actual = db.Users.FindById(4);
 
-            Assert.IsNotNull(user);
+            Assert.IsNotNull(actual);
             Assert.AreEqual("Marvin", actual.Name);
             Assert.AreEqual("diodes", actual.Password);
             Assert.AreEqual(42000000, actual.Age);
+            Assert.IsNotNull(actual.EmailAddresses);
+            Assert.AreEqual("bob@mcbob.com", actual.EmailAddresses[1]);
         }
     }
 }

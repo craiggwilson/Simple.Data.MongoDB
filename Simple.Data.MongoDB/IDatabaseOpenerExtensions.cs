@@ -14,11 +14,6 @@ namespace Simple.Data.MongoDB
             return opener.Open("MongoDb", new { ConnectionString = connectionString });
         }
 
-        public static Database OpenMongo(this IDatabaseOpener opener, MongoConnectionStringBuilder connectionStringBuilder)
-        {
-            return opener.Open("MongoDb", new { ConnectionString = connectionStringBuilder });
-        }
-
         public static Database OpenMongo(this IDatabaseOpener opener, MongoUrl mongoUrl)
         {
             return opener.Open("MongoDb", new { ConnectionString = mongoUrl });

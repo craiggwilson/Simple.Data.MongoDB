@@ -5,6 +5,8 @@ using System.Text;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Dynamic;
+using MongoDB.Bson.IO;
+using MongoDB.Bson.Serialization;
 
 namespace Simple.Data.MongoDB
 {
@@ -22,9 +24,39 @@ namespace Simple.Data.MongoDB
         {
             MongoIdKeys.ReplaceId(data);
 
-            var doc = data.ToBsonDocument();
+            var doc = ConvertToDocument(data);
             collection.Insert(doc);
             return doc.ToDictionary();
+        }
+
+        private BsonDocument ConvertToDocument(IDictionary<string, object> data)
+        {
+            var doc = new BsonDocument();
+            using (var bsonWriter = BsonWriter.Create(doc))
+            {
+                if (data.Count == 0)
+                {
+                    bsonWriter.WriteNull();
+                    return doc;
+                }
+
+                bsonWriter.WriteStartDocument();
+                foreach (var pair in data)
+                {
+                    bsonWriter.WriteName(pair.Key);
+                    var memberValue = pair.Value;
+                    if (memberValue == null)
+                        bsonWriter.WriteNull();
+                    else
+                    {
+                        var memberType = memberValue.GetType();
+                        var serializer = BsonSerializer.LookupSerializer(memberType);
+                        serializer.Serialize(bsonWriter, memberType, memberValue, null);
+                    }
+                }
+                bsonWriter.WriteEndDocument();
+            }
+            return doc;
         }
     }
 }

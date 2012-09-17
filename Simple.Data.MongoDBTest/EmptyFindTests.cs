@@ -25,8 +25,8 @@ namespace Simple.Data.MongoDBTest
         public void TestFindAll()
         {
             var db = DatabaseHelper.Open();
-            var user = db.Users.FindAll();
-            Assert.IsNull(user);
+            var user = db.Users.All();
+            Assert.IsEmpty(user);
         }
 
         [Test]

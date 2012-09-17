@@ -19,6 +19,7 @@ namespace Simple.Data.MongoDB
 
         public override object Deserialize(BsonReader bsonReader, Type nominalType, IBsonSerializationOptions options)
         {
+            // this is unnecessary in the context of Simple.Data.
             throw new NotImplementedException();
         }
 
@@ -46,8 +47,9 @@ namespace Simple.Data.MongoDB
                     bsonWriter.WriteNull();
                 else
                 {
-                    var serializer = BsonSerializer.LookupSerializer(memberValue.GetType());
-                    serializer.Serialize(bsonWriter, nominalType, memberValue, options);
+                    var memberType = memberValue.GetType();
+                    var serializer = BsonSerializer.LookupSerializer(memberType);
+                    serializer.Serialize(bsonWriter, memberType, memberValue, options);
                 }
             }
             bsonWriter.WriteEndDocument();

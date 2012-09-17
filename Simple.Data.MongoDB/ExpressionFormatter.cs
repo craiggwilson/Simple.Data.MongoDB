@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 
 using MongoDB.Bson;
 using MongoDB.Driver.Builders;
+using MongoDB.Driver;
 
 namespace Simple.Data.MongoDB
 {
@@ -19,7 +20,7 @@ namespace Simple.Data.MongoDB
             "endswith"
         };
 
-        private readonly Dictionary<string, Func<SimpleReference, SimpleFunction, QueryComplete>> _supportedFunctions;
+        private readonly Dictionary<string, Func<SimpleReference, SimpleFunction, IMongoQuery>> _supportedFunctions;
             
         private readonly MongoAdapter _adapter;
 
@@ -27,7 +28,7 @@ namespace Simple.Data.MongoDB
         {
             _adapter = adapter;
 
-            _supportedFunctions = new Dictionary<string, Func<SimpleReference, SimpleFunction, QueryComplete>>(StringComparer.InvariantCultureIgnoreCase)
+            _supportedFunctions = new Dictionary<string, Func<SimpleReference, SimpleFunction, IMongoQuery>>(StringComparer.InvariantCultureIgnoreCase)
             {
                 { "like", HandleLike },
                 { "startswith", HandleStartsWith },
@@ -36,7 +37,7 @@ namespace Simple.Data.MongoDB
             };
         }
 
-        public QueryComplete Format(SimpleExpression expression)
+        public IMongoQuery Format(SimpleExpression expression)
         {
             switch (expression.Type)
             {
@@ -63,14 +64,14 @@ namespace Simple.Data.MongoDB
             throw new NotSupportedException();
         }
 
-        private QueryComplete BinaryExpression(SimpleExpression expression, Func<string, BsonValue, QueryComplete> builder)
+        private IMongoQuery BinaryExpression(SimpleExpression expression, Func<string, BsonValue, IMongoQuery> builder)
         {
             var fieldName = (string)FormatObject(expression.LeftOperand);
             var value = BsonValue.Create(FormatObject(expression.RightOperand));
             return builder(fieldName, value);
         }
 
-        private QueryComplete EqualExpression(SimpleExpression expression)
+        private IMongoQuery EqualExpression(SimpleExpression expression)
         {
             var fieldName = (string)FormatObject(expression.LeftOperand);
             var range = expression.RightOperand as IRange;
@@ -88,26 +89,26 @@ namespace Simple.Data.MongoDB
             return Query.EQ(fieldName, BsonValue.Create(FormatObject(expression.RightOperand)));
         }
 
-        private QueryComplete FunctionExpression(SimpleExpression expression)
+        private IMongoQuery FunctionExpression(SimpleExpression expression)
         {
             var function = expression.RightOperand as SimpleFunction;
             if (function == null) throw new InvalidOperationException("Expected SimpleFunction as the right operand.");
 
-            Func<SimpleReference, SimpleFunction, QueryComplete> handler;
+            Func<SimpleReference, SimpleFunction, IMongoQuery> handler;
             if(!_supportedFunctions.TryGetValue(function.Name, out handler))
                 throw new NotSupportedException(string.Format("Unknown function '{0}'.", function.Name));
 
             return handler((SimpleReference)expression.LeftOperand, function);
         }
 
-        private QueryComplete LogicalExpression(SimpleExpression expression, Func<QueryComplete, QueryComplete, QueryComplete> builder)
+        private IMongoQuery LogicalExpression(SimpleExpression expression, Func<IMongoQuery, IMongoQuery, IMongoQuery> builder)
         {
             return builder(
                 Format((SimpleExpression)expression.LeftOperand),
                 Format((SimpleExpression)expression.RightOperand));
         }
 
-        private QueryComplete NotEqualExpression(SimpleExpression expression)
+        private IMongoQuery NotEqualExpression(SimpleExpression expression)
         {
             var fieldName = (string)FormatObject(expression.LeftOperand);
             var range = expression.RightOperand as IRange;
@@ -135,7 +136,7 @@ namespace Simple.Data.MongoDB
             return operand;
         }
 
-        private QueryComplete HandleLike(SimpleReference reference, SimpleFunction function)
+        private IMongoQuery HandleLike(SimpleReference reference, SimpleFunction function)
         {
             if (function.Args[0] is Regex)
                 return Query.Matches((string)FormatObject(reference), new BsonRegularExpression((Regex)function.Args[0]));
@@ -145,21 +146,21 @@ namespace Simple.Data.MongoDB
             throw new InvalidOperationException("Like can only be used with a string or Regex.");
         }
 
-        private QueryComplete HandleStartsWith(SimpleReference reference, SimpleFunction function)
+        private IMongoQuery HandleStartsWith(SimpleReference reference, SimpleFunction function)
         {
             if(!(function.Args[0] is string)) throw new InvalidOperationException("StartsWith can only be used with a string.");
          
             return Query.Matches((string)FormatObject(reference), new BsonRegularExpression("^" + (string)function.Args[0] + ".*"));
         }
 
-        private QueryComplete HandleContains(SimpleReference reference, SimpleFunction function)
+        private IMongoQuery HandleContains(SimpleReference reference, SimpleFunction function)
         {
             if (!(function.Args[0] is string)) throw new InvalidOperationException("StartsWith can only be used with a string.");
 
             return Query.Matches((string)FormatObject(reference), new BsonRegularExpression("^.*" + (string)function.Args[0] + ".*$"));
         }
 
-        private QueryComplete HandleEndsWith(SimpleReference reference, SimpleFunction function)
+        private IMongoQuery HandleEndsWith(SimpleReference reference, SimpleFunction function)
         {
             if (!(function.Args[0] is string)) throw new InvalidOperationException("StartsWith can only be used with a string.");
 
