@@ -3,7 +3,7 @@ Simple.Data.MongoDB
 
 This is the mongodb adapter for the [Simple.Data](https://github.com/markrendle/Simple.Data) library. For examples on its usage, see the core site as the syntax is exactly the same.  Any departures from that syntax will be documented in the wiki.
 
-This library is available via [nuget](http://www.nuget.org).
+This library is available via [nuget](https://www.nuget.org/packages/Simple.Data.MongoDB).
 
 ### Change Log
 * 9/17/2012 - 0.18.0.0
